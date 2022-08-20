@@ -1,3 +1,12 @@
+/.gradle
+/.idea
+/build
+/targetg
+
+# by some reason javafx is still not in the mavencentral
+/javafx
+*.iml
+
 # Compiled class file
 *.class
 
