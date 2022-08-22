@@ -1,11 +1,66 @@
 package me.stitch.ui
 
+import javafx.scene.image.Image
+import javafx.scene.image.WritableImage
+import me.stitch.db.LegendData
 import tornadofx.View
+import tornadofx.action
+import tornadofx.borderpane
+import tornadofx.button
+import tornadofx.center
+import tornadofx.hbox
+import tornadofx.hboxConstraints
+import tornadofx.imageview
 import tornadofx.label
+import tornadofx.left
+import tornadofx.scrollpane
+import tornadofx.style
 import tornadofx.vbox
 
 class MyView : View() {
-    override val root = vbox {
-        label("some text here")
+    private val img = Image("part11.png")
+    private val imgh = img.height
+    private val imgw = img.width
+    private val writableImage = WritableImage(img.pixelReader, imgw.toInt(), imgh.toInt())
+    val data = LegendData()
+    override val root = borderpane() {
+        left {
+            scrollpane {
+                vbox {
+                    for (item in data.list()) {
+                        hbox {
+                            button() {
+                                style {
+                                    backgroundColor += item.rgb
+                                }
+                                hboxConstraints {
+                                    prefHeight = 30.0
+                                    prefWidth = 30.0
+                                }
+                                action {
+                                    println(item.index)
+                                }
+                            }
+                            label(item.index.toString())
+                            imageview(item.pattern)
+                        }
+
+                    }
+                }
+            }
+        }
+        center {
+            scrollpane {
+                imageview(writableImage)
+                hboxConstraints {
+                    prefHeight = imgh
+                    prefWidth = imgw
+                }
+            }
+            hboxConstraints {
+                prefHeight = 800.0
+                prefWidth = 900.0
+            }
+        }
     }
 }
