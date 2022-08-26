@@ -78,6 +78,19 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>2.0.26</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-swing</artifactId>
+            <version>18.0.2</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/javafx/javafx-sdk-18.0.2/lib/javafx.swing.jar</systemPath>
+        </dependency>
+        <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
             <version>18.0.2</version>

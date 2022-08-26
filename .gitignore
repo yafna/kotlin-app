@@ -2,7 +2,8 @@
 /.idea
 /target
 /build
-/targetg
+/target
+/storage
 
 # by some reason javafx is still not in the mavencentral
 /javafx

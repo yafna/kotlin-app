@@ -1,7 +1,9 @@
 package me.stitch.ui
 
+import javafx.embed.swing.SwingFXUtils
 import javafx.scene.image.Image
 import javafx.scene.image.WritableImage
+import javafx.scene.paint.Color
 import me.stitch.db.LegendData
 import tornadofx.View
 import tornadofx.action
@@ -28,10 +30,12 @@ class MyView : View() {
             scrollpane {
                 vbox {
                     for (item in data.list()) {
+                        println(" $item.rgb.red ${item.rgb.green} ${item.rgb.blue}")
                         hbox {
-                            button() {
+                            imageview(SwingFXUtils.toFXImage(item.pattern, null))
+                            button {
                                 style {
-                                    backgroundColor += item.rgb
+                                    backgroundColor += Color.rgb(item.rgb.red, item.rgb.green, item.rgb.blue)
                                 }
                                 hboxConstraints {
                                     prefHeight = 30.0
@@ -41,8 +45,9 @@ class MyView : View() {
                                     println(item.index)
                                 }
                             }
-                            label(item.index.toString())
-                            imageview(item.pattern)
+//                            label(item.index.toString())
+                            imageview(SwingFXUtils.toFXImage(item.number, null))
+                            label("    ")
                         }
 
                     }
