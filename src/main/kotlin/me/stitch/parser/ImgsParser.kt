@@ -2,6 +2,7 @@ package me.stitch.parser
 
 import me.stitch.dto.LegendItem
 import java.awt.Color
+import java.awt.Image
 import java.awt.image.BufferedImage
 
 
@@ -60,5 +61,14 @@ class ImgsParser {
         rgb[1] = pixel shr 8 and 0xff
         rgb[2] = pixel and 0xff
         return rgb
+    }
+
+    fun resize(img: BufferedImage, newW: Int, newH: Int): BufferedImage? {
+        val tmp: Image = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH)
+        val dimg = BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB)
+        val g2d = dimg.createGraphics()
+        g2d.drawImage(tmp, 0, 0, null)
+        g2d.dispose()
+        return dimg
     }
 }

@@ -1,70 +1,72 @@
 package me.stitch.ui
 
-import javafx.embed.swing.SwingFXUtils
-import javafx.scene.image.Image
-import javafx.scene.image.WritableImage
-import javafx.scene.paint.Color
-import me.stitch.db.LegendData
+import javafx.beans.property.DoubleProperty
+import javafx.beans.property.SimpleDoubleProperty
+import javafx.scene.Cursor
 import tornadofx.View
 import tornadofx.action
 import tornadofx.borderpane
+import tornadofx.bottom
 import tornadofx.button
 import tornadofx.center
 import tornadofx.hbox
-import tornadofx.hboxConstraints
 import tornadofx.imageview
-import tornadofx.label
-import tornadofx.left
 import tornadofx.scrollpane
-import tornadofx.style
+import tornadofx.slider
 import tornadofx.vbox
 
-class MyView : View() {
-    private val img = Image("part11.png")
-    private val imgh = img.height
-    private val imgw = img.width
-    private val writableImage = WritableImage(img.pixelReader, imgw.toInt(), imgh.toInt())
-    val data = LegendData()
-    override val root = borderpane() {
-        left {
-            scrollpane {
-                vbox {
-                    for (item in data.list()) {
-                        println(" $item.rgb.red ${item.rgb.green} ${item.rgb.blue}")
-                        hbox {
-                            imageview(SwingFXUtils.toFXImage(item.pattern, null))
-                            button {
-                                style {
-                                    backgroundColor += Color.rgb(item.rgb.red, item.rgb.green, item.rgb.blue)
-                                }
-                                hboxConstraints {
-                                    prefHeight = 30.0
-                                    prefWidth = 30.0
-                                }
-                                action {
-                                    println(item.index)
-                                }
-                            }
-//                            label(item.index.toString())
-                            imageview(SwingFXUtils.toFXImage(item.number, null))
-                            label("    ")
-                        }
 
-                    }
-                }
-            }
-        }
+class MyView : View() {
+    private val legendView = find(LegendView::class)
+    val main: MainController by inject()
+    override val root = borderpane() {
+        prefHeight = 700.0
+        prefWidth = 700.0
+        left = legendView.root
+
         center {
             scrollpane {
-                imageview(writableImage)
-                hboxConstraints {
-                    prefHeight = imgh
-                    prefWidth = imgw
+                this.pannableProperty().set(true)
+                imageview(main.currentImageProperty) {
+                    this.imageProperty().bind(main.currentImageProperty)
+                    fitHeightProperty().bind(main.resizedHProperty)
+                    fitWidthProperty().bind(main.resizedWProperty)
+                    this.setOnMouseEntered { e -> this.setCursor(Cursor.OPEN_HAND) }
+                    this.setOnMousePressed { e -> this.setCursor(Cursor.CLOSED_HAND) }
+                    this.setOnMouseReleased { e -> this.setCursor(Cursor.OPEN_HAND) }
+                    this.setOnMouseExited { e -> this.setCursor(Cursor.DEFAULT) }
                 }
+                this.isPannable = true;
+                this.hvalue = 0.5;
+                this.vvalue = 0.5;
             }
-            hboxConstraints {
-                prefHeight = 800.0
-                prefWidth = 900.0
+        }
+        bottom {
+            vbox {
+                slider(0.1, 1.0, 1.0) {
+                    blockIncrement = 0.1
+                    valueProperty().addListener { e ->
+                        main.resizedWProperty.set(main.currentImageProperty.value.width * (e as DoubleProperty).value)
+                        main.resizedHProperty.set(main.currentImageProperty.value.height * e.value)
+                    }
+                }
+                scrollpane {
+                    hbox {
+                        for (i in 1 until main.allImgs().size) {
+                            button {
+                                imageview(main.allImgs()[i].first) {
+                                    this.preserveRatioProperty().set(true)
+                                    fitWidth = width * 0.01
+                                    fitHeight = height * 0.01
+                                }
+                                action {
+                                    main.currentImageProperty.set(main.allImgs()[i].second)
+                                    println("img  $i")
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }

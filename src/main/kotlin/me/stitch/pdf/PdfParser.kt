@@ -19,6 +19,7 @@ class PdfParser() {
         for (page in doc.pages) {
             images.addAll(getImagesFromResources(page.resources)!!)
         }
+        doc.close()
         return images
     }
 
