@@ -1,8 +1,9 @@
 package me.stitch.ui
 
 import javafx.beans.property.DoubleProperty
-import javafx.beans.property.SimpleDoubleProperty
+import javafx.embed.swing.SwingFXUtils
 import javafx.scene.Cursor
+import javafx.scene.paint.Color
 import tornadofx.View
 import tornadofx.action
 import tornadofx.borderpane
@@ -10,20 +11,46 @@ import tornadofx.bottom
 import tornadofx.button
 import tornadofx.center
 import tornadofx.hbox
+import tornadofx.hboxConstraints
 import tornadofx.imageview
+import tornadofx.label
+import tornadofx.left
 import tornadofx.scrollpane
 import tornadofx.slider
+import tornadofx.style
 import tornadofx.vbox
+import tornadofx.visibleWhen
 
 
 class MyView : View() {
-    private val legendView = find(LegendView::class)
     val main: MainController by inject()
     override val root = borderpane() {
         prefHeight = 700.0
         prefWidth = 700.0
-        left = legendView.root
-
+        left {
+            scrollpane {
+                vbox {
+                    for (item in main.legends()) {
+                        hbox {
+                            imageview(item.pattern)
+                            button {
+                                style {
+                                    backgroundColor += Color.rgb(item.rgb.red, item.rgb.green, item.rgb.blue)
+                                }
+                                hboxConstraints {
+                                    prefHeight = 30.0
+                                    prefWidth = 30.0
+                                }
+                                action {
+                                    main.legendClicked(item)
+                                }
+                            }
+                            imageview(item.number)
+                        }
+                    }
+                }
+            }
+        }
         center {
             scrollpane {
                 this.pannableProperty().set(true)
@@ -60,7 +87,7 @@ class MyView : View() {
                                     fitHeight = height * 0.01
                                 }
                                 action {
-                                    main.currentImageProperty.set(main.allImgs()[i].second)
+                                    main.pageSelected(main.allImgs()[i].second)
                                     println("img  $i")
                                 }
                             }

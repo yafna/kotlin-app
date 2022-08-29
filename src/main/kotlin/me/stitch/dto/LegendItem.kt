@@ -1,6 +1,6 @@
 package me.stitch.dto
 
+import javafx.scene.image.Image
 import java.awt.Color
-import java.awt.image.BufferedImage
 
-data class LegendItem(val index: Int, val rgb: Color, var pattern: BufferedImage, var number: BufferedImage)
+data class LegendItem(val index: Int, val rgb: Color, var pattern: Image, var number: Image)

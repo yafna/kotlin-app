@@ -2,15 +2,14 @@ package me.stitch.db
 
 import javafx.scene.image.Image
 import me.stitch.dto.LegendItem
+import me.stitch.dto.LegendItemToStore
 import me.stitch.parser.ImgsParser
-import me.stitch.pdf.PdfParser
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.File
 import java.io.FileInputStream
-import java.io.InputStream
 import java.nio.file.Files
-import java.util.*
+import java.util.Arrays
 import javax.imageio.ImageIO
 
 
@@ -30,8 +29,8 @@ class ImgData {
         val l = ImgsParser()
         var index = 0
         for (img in imgs) {
-            if(index > 1) {
-                val ind = index -2;
+            if (index > 1) {
+                val ind = index - 2;
                 ImageIO.write(img, png, File(dir, "$ind.$png"))
                 ImageIO.write(l.resize(img, 200, 200), png, File(dir, "$preview$ind.$png"))
             }
@@ -39,7 +38,7 @@ class ImgData {
         }
     }
 
-    fun storeLegend(prefix: String, items: List<LegendItem>) {
+    fun storeLegend(prefix: String, items: List<LegendItemToStore>) {
         val dir = File("$directory/$prefix/legend")
         if (!dir.exists()) {
             dir.mkdirs()
@@ -54,12 +53,17 @@ class ImgData {
         }
     }
 
-    fun listImgs(prefix: String): List<Pair<Image,Image>> {
-        val res = ArrayList<Pair<Image,Image>>()
+    fun listImgs(prefix: String): List<Pair<Image, Image>> {
+        val res = ArrayList<Pair<Image, Image>>()
         val dir = File("$directory/$prefix/data")
         var index = 0
         while (File(dir, "$index.${png}").exists()) {
-            res.add(Pair(Image(FileInputStream(File(dir, "$preview$index.${png}"))) , Image(FileInputStream(File(dir, "$index.${png}")))))
+            res.add(
+                Pair(
+                    Image(FileInputStream(File(dir, "$preview$index.${png}"))),
+                    Image(FileInputStream(File(dir, "$index.${png}")))
+                )
+            )
             index += 1
         }
         return res
@@ -77,19 +81,12 @@ class ImgData {
             res.add(
                 LegendItem(
                     index, Color(colorStrs[0].toInt(), colorStrs[1].toInt(), colorStrs[2].toInt()),
-                    ImageIO.read(File(dir, "${numTemplate}${index}.${png}")),
-                    ImageIO.read(File(dir, "${patternTemplate}${index}.${png}"))
+                    Image(FileInputStream(File(dir, "${patternTemplate}${index}.${png}"))),
+                    Image(FileInputStream(File(dir, "${numTemplate}${index}.${png}")))
                 )
             )
             index += 1
         }
-
-        val l = ImgsParser()
-        val path = javaClass.getClassLoader().getResource("pixel1.pdf")?.toURI()
-        val p = PdfParser()
-        val imgs = path?.let { p.getImagesFromPDF(it) }
-        return l.legends(imgs!!.elementAt(1))
+        return res
     }
-
-
 }
