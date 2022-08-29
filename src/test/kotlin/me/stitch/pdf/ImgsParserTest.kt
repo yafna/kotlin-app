@@ -4,6 +4,7 @@ import javafx.embed.swing.SwingFXUtils
 import javafx.scene.image.Image
 import javafx.scene.paint.Color
 import me.stitch.db.ImgData
+import me.stitch.parser.Direction
 import me.stitch.parser.ImgsParser
 import org.junit.jupiter.api.Test
 import java.io.File
@@ -18,6 +19,21 @@ class ImgsParserTest {
         val test = l.or(Color.BLACK, Color.CORAL)
         assertEquals(Color.BLACK.red, test.red)
     }
+@Test
+fun combinetest(){
+    val img = Image(FileInputStream(File(javaClass.getClassLoader().getResource("0.png").toURI())))
+    val l = ImgsParser()
+    val topline = l.combine(img, img, Direction.RIGHT_TOP, img.width.toInt(), img.height.toInt())
+    val almostsqare =  l.combine(topline, img, Direction.LEFT_BOTTOM, img.width.toInt(), img.height.toInt())
+    val square =  l.combine(almostsqare, img, Direction.RIGHT_BOTTOM, img.width.toInt(), img.height.toInt())
+    ImageIO.write(SwingFXUtils.fromFXImage(topline, null), "png", File("sq1.png"))
+    ImageIO.write(SwingFXUtils.fromFXImage(almostsqare, null), "png", File("sq2.png"))
+    ImageIO.write(SwingFXUtils.fromFXImage(square, null), "png", File("sq3.png"))
+    val data = ImgData()
+    val leg = data.listLegends("pixel1")
+    val himg = l.highlight(square, leg.get(12), img.width.toInt(), img.height.toInt())
+    ImageIO.write(SwingFXUtils.fromFXImage(himg, null), "png", File("eee2.png"))
+}
 
     @Test
     fun highlight() {
@@ -25,13 +41,7 @@ class ImgsParserTest {
         val data = ImgData()
         val leg = data.listLegends("pixel1")
         val img = Image(FileInputStream(File(javaClass.getClassLoader().getResource("0.png").toURI())))
-        val himg = l.highlight(img, leg.get(12))
-        println(img.pixelReader.getColor(58,56).red)
-        println(img.pixelReader.getColor(58,56).green)
-        println(img.pixelReader.getColor(58,56).blue)
-        println(himg.pixelReader.getColor(58,56).red)
-        println(himg.pixelReader.getColor(58,56).green)
-        println(himg.pixelReader.getColor(58,56).blue)
+        val himg = l.highlight(img, leg.get(12), img.width.toInt(), img.height.toInt())
         val newimg = SwingFXUtils.fromFXImage(himg, null)
         ImageIO.write(newimg, "png", File("2.png"))
     }

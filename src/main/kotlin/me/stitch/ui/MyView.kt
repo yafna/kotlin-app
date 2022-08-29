@@ -1,7 +1,6 @@
 package me.stitch.ui
 
 import javafx.beans.property.DoubleProperty
-import javafx.embed.swing.SwingFXUtils
 import javafx.scene.Cursor
 import javafx.scene.paint.Color
 import tornadofx.View
@@ -10,21 +9,38 @@ import tornadofx.borderpane
 import tornadofx.bottom
 import tornadofx.button
 import tornadofx.center
+import tornadofx.contextmenu
 import tornadofx.hbox
 import tornadofx.hboxConstraints
 import tornadofx.imageview
-import tornadofx.label
+import tornadofx.item
 import tornadofx.left
+import tornadofx.menu
+import tornadofx.menubar
 import tornadofx.scrollpane
 import tornadofx.slider
 import tornadofx.style
+import tornadofx.top
 import tornadofx.vbox
-import tornadofx.visibleWhen
 
 
 class MyView : View() {
     val main: MainController by inject()
     override val root = borderpane() {
+        top {
+            menubar {
+                menu("File") {
+                    item("Load").action {
+//                        var dir = chooseFile("Select Target Directory")
+                        main.loadPatterns()
+                    }
+
+                    item("Save").action {
+                        main.saveState()
+                    }
+                }
+            }
+        }
         prefHeight = 700.0
         prefWidth = 700.0
         left {
@@ -73,8 +89,7 @@ class MyView : View() {
                 slider(0.1, 1.0, 1.0) {
                     blockIncrement = 0.1
                     valueProperty().addListener { e ->
-                        main.resizedWProperty.set(main.currentImageProperty.value.width * (e as DoubleProperty).value)
-                        main.resizedHProperty.set(main.currentImageProperty.value.height * e.value)
+                        main.sliderMove(e as DoubleProperty)
                     }
                 }
                 scrollpane {
@@ -89,6 +104,12 @@ class MyView : View() {
                                 action {
                                     main.pageSelected(main.allImgs()[i].second)
                                     println("img  $i")
+                                }
+                                contextmenu {
+                                    item("right top >").action { main.combineRightTop(main.allImgs()[i].second) }
+                                    item("< left bottom").action { main.combineLeftBottom(main.allImgs()[i].second) }
+                                    item("right bottom >").action { main.combineRightBottom(main.allImgs()[i].second) }
+                                    item("drop").action { main.drop() }
                                 }
                             }
                         }

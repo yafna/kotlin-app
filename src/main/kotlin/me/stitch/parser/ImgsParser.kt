@@ -138,9 +138,40 @@ class ImgsParser {
         )
     }
 
+    fun combine(base: Image, img: Image, direction: Direction, ex: Int, ey: Int): WritableImage {
+        var w = base.width.toInt()
+        var h = base.height.toInt()
+        if (direction == Direction.RIGHT_TOP) {
+            w += img.width.toInt()
+        }
+        if (direction == Direction.LEFT_BOTTOM) {
+            h += img.height.toInt()
+        }
+        val result = WritableImage(w, h)
+        val resultWriter = result.pixelWriter
+        for (x in 0 until base.width.toInt()) {
+            for (y in 0 until base.height.toInt()) {
+                resultWriter.setColor(x, y, base.pixelReader.getColor(x, y))
+            }
+        }
+        var startx = 0
+        if (direction == Direction.RIGHT_BOTTOM || direction == Direction.RIGHT_TOP) {
+            startx = ex
+        }
+        var starty = 0
+        if (direction == Direction.RIGHT_BOTTOM || direction == Direction.LEFT_BOTTOM) {
+            starty = ey
+        }
+        for (x in 0 until img.width.toInt() - 1) {
+            for (y in 0 until img.height.toInt() - 1) {
+                resultWriter.setColor(x + startx, y + starty, img.pixelReader.getColor(x, y))
+            }
+        }
+        return result
+    }
+
     fun highlight(
-        img: Image?,
-        legendItem: LegendItem,
+        img: Image?, legendItem: LegendItem, imgw: Int, imgh: Int,
         color: javafx.scene.paint.Color = javafx.scene.paint.Color.CORAL
     ): WritableImage {
         if (img == null) {
@@ -155,14 +186,28 @@ class ImgsParser {
                 resultWriter.setColor(x, y, img.pixelReader.getColor(x, y))
             }
         }
-        val iw = ((img.width - 47) / 33).toInt()
-        val ih = ((img.height - 44) / 33).toInt()
-        for (x in 0 until iw) {
-            for (y in 0 until ih) {
-                if (isSquare(img, 47 + x * 33, 45 + y * 33, 23, 27, legendItem)) {
-                    for (i in 47 + x * 33 until 72 + x * 33) {
-                        for (j in 45 + y * 33 until 73 + y * 33) {
-                            resultWriter.setColor(i, j, or(img.pixelReader.getColor(i, j), color))
+        val gapsx = arrayListOf(Pair(Pair(47, 45), Pair(imgw, imgh)))
+        if (abs(img.width.toInt() - imgw) > 3) {
+            gapsx.add(Pair(Pair(imgw + 47, 45), Pair(img.width.toInt(), imgh)))
+        }
+        if (abs(img.height.toInt() - imgh) > 3) {
+            gapsx.add(Pair(Pair(47, imgh + 45), Pair(imgw, img.height.toInt())))
+            gapsx.add(Pair(Pair(imgw + 47, imgh + 45), Pair(img.width.toInt(), img.height.toInt())))
+        }
+        for (gapind in 0 until gapsx.size) {
+            val iw = (gapsx[gapind].second.first - gapsx[gapind].first.first) / 33
+            val ih = (gapsx[gapind].second.second - gapsx[gapind].first.second) / 33
+            for (x in 0..iw) {
+                for (y in 0..ih) {
+                    val ilow = gapsx[gapind].first.first + x * 33
+                    val jlow = gapsx[gapind].first.second + y * 33
+                    val ihi = gapsx[gapind].first.first + x * 33 + 23
+                    val jhi = gapsx[gapind].first.second + y * 33 + 27
+                    if (isSquare(img, ilow, jlow, 23, 27, legendItem)) {
+                        for (i in ilow until ihi) {
+                            for (j in jlow until jhi) {
+                                resultWriter.setColor(i, j, or(img.pixelReader.getColor(i, j), color))
+                            }
                         }
                     }
                 }
@@ -170,4 +215,8 @@ class ImgsParser {
         }
         return result
     }
+}
+
+enum class Direction {
+    LEFT_TOP, RIGHT_TOP, LEFT_BOTTOM, RIGHT_BOTTOM
 }
