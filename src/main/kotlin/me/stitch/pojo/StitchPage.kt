@@ -1,4 +1,4 @@
-package me.stitch.dto
+package me.stitch.pojo
 
 abstract class StitchPage{
     abstract val fromx : Int

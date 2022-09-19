@@ -2,8 +2,8 @@ package me.stitch.parser
 
 import javafx.scene.image.Image
 import javafx.scene.image.WritableImage
-import me.stitch.dto.LegendItem
-import me.stitch.dto.LegendItemToStore
+import me.stitch.pojo.LegendItem
+import me.stitch.pojo.LegendItemToStore
 import java.awt.Color
 import java.awt.image.BufferedImage
 import kotlin.math.abs

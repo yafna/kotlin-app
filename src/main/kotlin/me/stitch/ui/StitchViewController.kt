@@ -4,7 +4,7 @@ import javafx.beans.property.DoubleProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.scene.image.Image
 import me.stitch.db.ImgData
-import me.stitch.dto.LegendItem
+import me.stitch.pojo.LegendItem
 import me.stitch.parser.Direction
 import me.stitch.parser.ImgsParser
 import tornadofx.Controller

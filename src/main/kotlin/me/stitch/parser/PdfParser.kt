@@ -1,4 +1,4 @@
-package me.stitch.pdf
+package me.stitch.parser
 
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.PDResources
@@ -8,7 +8,6 @@ import java.awt.image.BufferedImage
 import java.io.File
 import java.io.IOException
 import java.net.URI
-import javax.imageio.ImageIO
 
 
 class PdfParser() {

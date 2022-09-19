@@ -1,4 +1,4 @@
-package me.stitch.dto
+package me.stitch.pojo
 
 import java.awt.Color
 import java.awt.image.BufferedImage

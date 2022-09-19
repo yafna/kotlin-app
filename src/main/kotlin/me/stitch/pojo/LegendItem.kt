@@ -1,4 +1,4 @@
-package me.stitch.dto
+package me.stitch.pojo
 
 import javafx.scene.image.Image
 import java.awt.Color

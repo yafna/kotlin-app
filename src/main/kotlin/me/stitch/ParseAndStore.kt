@@ -2,7 +2,7 @@ package me.stitch
 
 import me.stitch.db.ImgData
 import me.stitch.parser.ImgsParser
-import me.stitch.pdf.PdfParser
+import me.stitch.parser.PdfParser
 
 
 fun main() {

@@ -1,8 +1,8 @@
 package me.stitch.db
 
 import javafx.scene.image.Image
-import me.stitch.dto.LegendItem
-import me.stitch.dto.LegendItemToStore
+import me.stitch.pojo.LegendItem
+import me.stitch.pojo.LegendItemToStore
 import me.stitch.parser.ImgsParser
 import java.awt.Color
 import java.awt.image.BufferedImage

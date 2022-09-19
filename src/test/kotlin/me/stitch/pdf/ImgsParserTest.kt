@@ -6,6 +6,7 @@ import javafx.scene.paint.Color
 import me.stitch.db.ImgData
 import me.stitch.parser.Direction
 import me.stitch.parser.ImgsParser
+import me.stitch.parser.PdfParser
 import org.junit.jupiter.api.Test
 import java.io.File
 import java.io.FileInputStream

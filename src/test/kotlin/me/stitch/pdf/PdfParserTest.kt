@@ -1,5 +1,6 @@
 package me.stitch.pdf
 
+import me.stitch.parser.PdfParser
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull

@@ -76,10 +76,10 @@ class StitchView : View() {
                     this.imageProperty().bind(main.currentImageProperty)
                     fitHeightProperty().bind(main.resizedHProperty)
                     fitWidthProperty().bind(main.resizedWProperty)
-                    this.setOnMouseEntered { e -> this.setCursor(Cursor.OPEN_HAND) }
-                    this.setOnMousePressed { e -> this.setCursor(Cursor.CLOSED_HAND) }
-                    this.setOnMouseReleased { e -> this.setCursor(Cursor.OPEN_HAND) }
-                    this.setOnMouseExited { e -> this.setCursor(Cursor.DEFAULT) }
+                    this.setOnMouseEntered { _ -> this.setCursor(Cursor.OPEN_HAND) }
+                    this.setOnMousePressed { _ -> this.setCursor(Cursor.CLOSED_HAND) }
+                    this.setOnMouseReleased { _ -> this.setCursor(Cursor.OPEN_HAND) }
+                    this.setOnMouseExited { _ -> this.setCursor(Cursor.DEFAULT) }
                 }
                 this.isPannable = true;
                 this.hvalue = 0.5;

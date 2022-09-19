@@ -2,14 +2,19 @@ package me.stitch.ui.load
 
 import javafx.beans.binding.BooleanExpression
 import javafx.beans.property.SimpleObjectProperty
-import me.stitch.pdf.PdfParser
+
+import me.stitch.parser.PdfParser
 import tornadofx.Controller
 import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.IIOException
 import javax.imageio.ImageIO
+import mu.KotlinLogging
+import java.util.LinkedHashSet
 
+private val logger = KotlinLogging.logger {}
 class WizardController : Controller() {
+
     //TODO merge it
     val loadAsPdf = SimpleObjectProperty(true)
     val loadAsImg = SimpleObjectProperty(false)
@@ -28,9 +33,12 @@ class WizardController : Controller() {
         val images: MutableSet<BufferedImage> = LinkedHashSet()
         file.walk().forEach {
             try {
-                images.add(ImageIO.read(it))
+                if (it.isFile)
+                    images.add(ImageIO.read(it))
             } catch (ex: IIOException) {
-                println("${it.absolutePath} not an image")
+                logger.debug("${it.absolutePath} not an image")
+            } catch (ex: Exception){
+                logger.error(ex){}
             }
         }
         imgs.value = images

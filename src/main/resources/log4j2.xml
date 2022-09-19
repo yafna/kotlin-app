@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appenders>
+        <console name="stdout" target="SYSTEM_OUT">
+            <patternLayout pattern="%d{ABSOLUTE} %5p %c{1}:%L - %m%n" />
+        </console>
+    </appenders>
+    <appenders>
+        <RollingFile name="rollingFile"
+                fileName="logDir/application.log"
+                filePattern="logDir/application.%i.log.gz"
+                ignoreExceptions="false">
+            <PatternLayout>
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss} %-5p %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="5" />
+        </RollingFile>
+    </appenders>
+
+    <loggers>
+        <root level="info">
+            <appenderRef ref="stdout" />
+            <appenderRef ref="rollingFile" />
+        </root>
+    </loggers>
+</configuration>
