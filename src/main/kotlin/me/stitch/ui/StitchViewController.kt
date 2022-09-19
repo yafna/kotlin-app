@@ -9,7 +9,7 @@ import me.stitch.parser.Direction
 import me.stitch.parser.ImgsParser
 import tornadofx.Controller
 
-class MainController : Controller() {
+class StitchViewController : Controller() {
     val prefix = "pixel1"
     private val imgParser = ImgsParser()
     private val imgData = ImgData()

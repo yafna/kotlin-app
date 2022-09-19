@@ -3,6 +3,7 @@ package me.stitch.ui
 import javafx.beans.property.DoubleProperty
 import javafx.scene.Cursor
 import javafx.scene.paint.Color
+import me.stitch.ui.load.LoadWizard
 import tornadofx.View
 import tornadofx.action
 import tornadofx.borderpane
@@ -24,15 +25,16 @@ import tornadofx.top
 import tornadofx.vbox
 
 
-class MyView : View() {
-    val main: MainController by inject()
+class StitchView : View() {
+    val main: StitchViewController by inject()
     override val root = borderpane() {
         top {
             menubar {
                 menu("File") {
                     item("Load").action {
-//                        var dir = chooseFile("Select Target Directory")
-                        main.loadPatterns()
+                        find<LoadWizard> {
+                            openModal()
+                        }
                     }
 
                     item("Save").action {
@@ -94,7 +96,7 @@ class MyView : View() {
                 }
                 scrollpane {
                     hbox {
-                        for (i in 1 until main.allImgs().size) {
+                        for (i in 0 until main.allImgs().size) {
                             button {
                                 imageview(main.allImgs()[i].first) {
                                     this.preserveRatioProperty().set(true)
