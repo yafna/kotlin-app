@@ -8,7 +8,8 @@ import me.stitch.parser.PdfParser
 fun main() {
     val filename = "pixel1"
     val l = ImgsParser()
-    val path = l.javaClass.getClassLoader().getResource("${filename}.pdf").toURI()
+//    l::class.java.classLoader.getResource("pixel1.pdf").toURI()
+    val path = l::class.java.classLoader.getResource("pixel1.pdf").toURI()
     val p = PdfParser()
     val imgs = p.getImagesFromPDF(path)
     val legends = l.legends(imgs!!.elementAt(1))

@@ -1,11 +1,13 @@
 package me.stitch.ui.load
 
+import javafx.scene.Parent
 import tornadofx.View
 import tornadofx.form
-import tornadofx.label
 
-class ArrangePages: View("Arrange") {
-    override val root = form {
-        label("dummy")
+class ArrangePages : View("Arrange") {
+    val controller: WizardController by inject()
+    override val root= form {
+
     }
+
 }

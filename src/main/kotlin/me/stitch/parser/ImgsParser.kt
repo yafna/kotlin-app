@@ -25,7 +25,7 @@ class ImgsParser {
             var color = rgb(img.getRGB(xx + 40, y))
             while (color[0] < 245 || color[1] < 245 || color[2] < 245) {
                 var count = 0
-                var endline = xx + 70
+                var endline = xx + 100
                 for (i in (xx + 70)..(xx + 150)) {
                     var allW = true
                     for (j in y..(y + 30)) {
@@ -37,7 +37,7 @@ class ImgsParser {
                     if (allW) {
                         count += 1
                     }
-                    if (count > 3) {
+                    if (count > 5) {
                         endline = i - xx - 70 // we need width here
                         break
                     }
